@@ -17,7 +17,8 @@ internal sealed class Program
 
         if (n != 0 && m != 0)
         {
-            Console.WriteLine(string.Join(" ", Merge(arrayN, arrayM)));
+            var array = arrayN.Concat(arrayM).ToArray();
+            Console.WriteLine(string.Join(" ", Merge(array, 0, array.Length - 1, n)));
         }
         else if (n == 0 && m != 0)
         {
@@ -33,40 +34,40 @@ internal sealed class Program
         }
     }
 
-    private static int[] Merge(int[] arrayN, int[] arrayM)
+    private static int[] Merge(int[] array, int left, int right, int middle)
     {
-        var cursorN = 0;
-        var cursorM = 0;
-        var mergedArray = new int[arrayN.Length + arrayM.Length];
-        
+        var cursor1 = left;
+        var cursor2 = middle;
+        var mergedArray = new int[array.Length];
+
         for (var i = 0; i < mergedArray.Length; i++)
         {
-            if (cursorM >= arrayM.Length)
+            if (cursor2 > right)
             {
-                mergedArray[i] = arrayN[cursorN];
-                cursorN++;
+                mergedArray[i] = array[cursor1];
+                cursor1++;
                 continue;
             }
-            
-            if (cursorN >= arrayN.Length)
+
+            if (cursor1 >= middle)
             {
-                mergedArray[i] = arrayM[cursorM];
-                cursorM++;
+                mergedArray[i] = array[cursor2];
+                cursor2++;
                 continue;
             }
-            
-            if (cursorM >= arrayM.Length || arrayN[cursorN] <= arrayM[cursorM])
+
+            if (array[cursor1] <= array[cursor2])
             {
-                mergedArray[i] = arrayN[cursorN];
-                cursorN++;
+                mergedArray[i] = array[cursor1];
+                cursor1++;
             }
-            else if (cursorN >= arrayN.Length || arrayN[cursorN] > arrayM[cursorM])
+            else if (array[cursor1] > array[cursor2])
             {
-                mergedArray[i] = arrayM[cursorM];
-                cursorM++;
+                mergedArray[i] = array[cursor2];
+                cursor2++;
             }
         }
-        
+
         return mergedArray;
     }
 }
